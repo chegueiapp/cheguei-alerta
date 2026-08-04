@@ -18,6 +18,7 @@
         "height": 540,
         "resizable": false,
         "maximizable": false,
+        "minimizable": false,
         "visible": false,
         "center": true,
         "skipTaskbar": true

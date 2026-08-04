@@ -1,10 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
-  font-family: 'Segoe UI', Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #1e293b;
 }
 
 * {
   box-sizing: border-box;
+  font-family: inherit;
 }
 
 body {
@@ -36,11 +39,28 @@ body {
   margin-top: 2px;
 }
 
-.titulo-login,
-.titulo-idle {
-  font-size: 20px;
-  font-weight: 800;
-  margin: 0 0 4px 0;
+.logo-marca {
+  width: 150px;
+  height: auto;
+  margin-bottom: 2px;
+}
+
+/* Fundo do alerta e colorido (azul/verde/ambar) -- o logo original e escuro e sumiria,
+   entao vira branco so aqui via filtro (nao existe um asset branco separado do logo). */
+.logo-marca-alerta {
+  width: 110px;
+  margin-bottom: 14px;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.subtitulo-marca {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0 0 16px 0;
 }
 
 .status-dot {
@@ -122,14 +142,60 @@ body {
   background: linear-gradient(160deg, #16a34a, #14532d);
 }
 
+.tela-alerta.aprovado {
+  background: linear-gradient(160deg, #d97706, #92400e);
+}
+
 @keyframes pulse-bg {
   0%, 100% { filter: brightness(1); }
   50% { filter: brightness(1.12); }
 }
 
+.alerta-icone-wrapper {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+/* Ondas expandindo tipo "radar de notificação", atrás do icone -- reforça o alerta
+   visualmente no mesmo ritmo do toque (ver RING_MS+GAP_MS em lib/ringtone.ts). */
+.alerta-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.55);
+  animation: ring-expand 1.8s ease-out infinite;
+}
+
+.alerta-ring.atraso {
+  animation-delay: 0.9s;
+}
+
+@keyframes ring-expand {
+  0% { transform: scale(0.4); opacity: 0.9; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
 .alerta-icone {
+  position: relative;
   font-size: 56px;
   margin-bottom: 8px;
+  animation: icone-chacoalha 1.2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes icone-chacoalha {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  10% { transform: rotate(-12deg) scale(1.05); }
+  20% { transform: rotate(10deg) scale(1.05); }
+  30% { transform: rotate(-8deg) scale(1.03); }
+  40% { transform: rotate(6deg) scale(1.03); }
+  50%, 100% { transform: rotate(0deg) scale(1); }
 }
 
 .alerta-titulo {

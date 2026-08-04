@@ -7,7 +7,7 @@ depender de uma aba do `cheguei-app` aberta no navegador (throttling de aba em s
 plano, aba fechada sem querer, etc.).
 
 Não reimplementa nada do painel do parceiro — é só o "telefone tocando". O botão "ver
-detalhes" abre a página correspondente do `cheguei-app` (`chegueiapp.store`) no navegador
+detalhes" abre a página correspondente do `cheguei-app` (`chegueiapp.com.br`) no navegador
 padrão.
 
 ## Como funciona

@@ -1,9 +1,19 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
-    Manager, WindowEvent,
+    Manager, WebviewWindow, WindowEvent,
 };
 use tauri_plugin_autostart::MacosLauncher;
+
+// Chamado tanto pelo clique no tray quanto pelo item "Abrir" do menu. `show()` sozinho nao
+// desminimiza -- se a janela ficou minimizada (nao apenas escondida), show() e um no-op
+// porque o Windows ja considera ela "visivel", so iconificada. Sem o unminimize, o clique
+// no tray parecia nao fazer nada (bug visto ao vivo).
+fn mostrar_janela(window: &WebviewWindow) {
+    let _ = window.unminimize();
+    let _ = window.show();
+    let _ = window.set_focus();
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -22,8 +32,7 @@ pub fn run() {
                 .on_menu_event(|app, event| match event.id.as_ref() {
                     "show" => {
                         if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.show();
-                            let _ = window.set_focus();
+                            mostrar_janela(&window);
                         }
                     }
                     "quit" => {
@@ -40,8 +49,7 @@ pub fn run() {
                     {
                         let app = tray.app_handle();
                         if let Some(window) = app.get_webview_window("main") {
-                            let _ = window.show();
-                            let _ = window.set_focus();
+                            mostrar_janela(&window);
                         }
                     }
                 })

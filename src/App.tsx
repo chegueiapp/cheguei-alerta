@@ -3,9 +3,11 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { supabase } from './lib/supabase';
 import { startRingtone, stopRingtone } from './lib/ringtone';
+import { isMetodoOffline } from './lib/pagamento';
+import logoImg from './assets/cheguei-logo.png';
 import './App.css';
 
-const SITE_URL = 'https://www.chegueiapp.store';
+const SITE_URL = 'https://chegueiapp.com.br';
 
 interface AlertItem {
   key: string;
@@ -39,6 +41,7 @@ export default function App() {
     const win = getCurrentWindow();
     if (alertaAtual) {
       startRingtone();
+      win.unminimize();
       win.show();
       win.setFocus();
       win.setAlwaysOnTop(true);
@@ -211,7 +214,8 @@ export default function App() {
   if (fase === 'login') {
     return (
       <div className="tela-central">
-        <h1 className="titulo-login">cheguei! Alerta</h1>
+        <img src={logoImg} alt="cheguei!" className="logo-marca" />
+        <p className="subtitulo-marca">alerta</p>
         <p className="texto-fraco" style={{ marginBottom: 20 }}>
           entre com o login do seu portal de parceiro
         </p>
@@ -241,14 +245,31 @@ export default function App() {
 
   if (alertaAtual) {
     const isNovo = alertaAtual.type === 'novo';
+    // Pedido pago na entrega/retirada nunca passa por confirmacao de pagamento de verdade
+    // -- o status vira 'pago' no exato momento em que o PROPRIO parceiro aprova o pedido
+    // (ver Solicitacoes.tsx:460-462), entao "PEDIDO PAGO!" seria enganoso aqui: quem
+    // disparou o evento foi o parceiro, nao o cliente pagando algo.
+    const isAprovacaoLocal = !isNovo && isMetodoOffline(alertaAtual.metodo);
+    const variante = isNovo ? 'novo' : isAprovacaoLocal ? 'aprovado' : 'pago';
+    const icone = isNovo ? '📦' : isAprovacaoLocal ? '🤝' : '💰';
+    const titulo = isNovo ? 'NOVA SOLICITAÇÃO!' : isAprovacaoLocal ? 'PEDIDO APROVADO!' : 'PEDIDO PAGO!';
+    const descricao = isNovo
+      ? 'Um novo cliente enviou um pedido.'
+      : isAprovacaoLocal
+        ? 'Pagamento será feito na entrega/retirada.'
+        : 'O pagamento do pedido foi confirmado.';
+
     return (
-      <div className={`tela-alerta ${isNovo ? 'novo' : 'pago'}`}>
-        <div className="alerta-icone">{isNovo ? '📦' : '💰'}</div>
-        <h1 className="alerta-titulo">{isNovo ? 'NOVA SOLICITAÇÃO!' : 'PEDIDO PAGO!'}</h1>
+      <div className={`tela-alerta ${variante}`}>
+        <img src={logoImg} alt="cheguei!" className="logo-marca logo-marca-alerta" />
+        <div className="alerta-icone-wrapper">
+          <span className="alerta-ring" />
+          <span className="alerta-ring atraso" />
+          <div className="alerta-icone">{icone}</div>
+        </div>
+        <h1 className="alerta-titulo">{titulo}</h1>
         <p className="alerta-pedido">Pedido #{alertaAtual.pedidoId.slice(-6).toUpperCase()}</p>
-        <p className="alerta-desc">
-          {isNovo ? 'Um novo cliente enviou um pedido.' : 'O pagamento do pedido foi confirmado.'}
-        </p>
+        <p className="alerta-desc">{descricao}</p>
         {fila.length > 1 && <p className="alerta-fila">+{fila.length - 1} aguardando</p>}
         <div className="alerta-botoes">
           <button className="btn-detalhes" onClick={verDetalhes}>ver detalhes agora</button>
@@ -260,8 +281,9 @@ export default function App() {
 
   return (
     <div className="tela-central">
+      <img src={logoImg} alt="cheguei!" className="logo-marca" />
+      <p className="subtitulo-marca">alerta</p>
       <div className="status-dot" />
-      <h1 className="titulo-idle">cheguei! Alerta</h1>
       <p className="texto-fraco">{lojaNome || 'conectado'}</p>
       <p className="texto-fraco-menor">aguardando pedidos em segundo plano</p>
       <button className="btn-sair" onClick={sair}>trocar de conta</button>
