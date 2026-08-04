@@ -1,0 +1,188 @@
+:root {
+  font-family: 'Segoe UI', Inter, Avenir, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.tela-central {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  background: #f8fafc;
+  gap: 4px;
+}
+
+.texto-fraco {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.texto-fraco-menor {
+  color: #94a3b8;
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.titulo-login,
+.titulo-idle {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px #22c55e33;
+  margin-bottom: 12px;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.form-login input {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.form-login button {
+  margin-top: 4px;
+  border-radius: 10px;
+  border: none;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #1e293b;
+  cursor: pointer;
+}
+
+.form-login button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.erro-login {
+  color: #dc2626;
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.btn-sair {
+  margin-top: 18px;
+  border: none;
+  background: none;
+  color: #94a3b8;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Tela de alerta (mesmo espírito visual do modal do cheguei-app web) ── */
+
+.tela-alerta {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px;
+  color: #fff;
+  animation: pulse-bg 1.2s ease-in-out infinite;
+}
+
+.tela-alerta.novo {
+  background: linear-gradient(160deg, #1d4ed8, #1e3a8a);
+}
+
+.tela-alerta.pago {
+  background: linear-gradient(160deg, #16a34a, #14532d);
+}
+
+@keyframes pulse-bg {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.12); }
+}
+
+.alerta-icone {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+
+.alerta-titulo {
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.3px;
+}
+
+.alerta-pedido {
+  font-size: 13px;
+  opacity: 0.85;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+}
+
+.alerta-desc {
+  font-size: 13.5px;
+  opacity: 0.9;
+  margin: 0 0 6px 0;
+  max-width: 260px;
+}
+
+.alerta-fila {
+  font-size: 11.5px;
+  opacity: 0.75;
+  margin: 4px 0 0 0;
+}
+
+.alerta-botoes {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 240px;
+}
+
+.alerta-botoes button {
+  border-radius: 10px;
+  border: none;
+  padding: 12px;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-detalhes {
+  background: #fff;
+  color: #1e293b;
+}
+
+.btn-fechar {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
