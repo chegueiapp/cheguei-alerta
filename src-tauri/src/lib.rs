@@ -3,7 +3,7 @@ use tauri::{
     tray::TrayIconBuilder,
     Manager, WebviewWindow, WindowEvent,
 };
-use tauri_plugin_autostart::MacosLauncher;
+use tauri_plugin_autostart::{MacosLauncher, ManagerExt};
 
 // Chamado tanto pelo clique no tray quanto pelo item "Abrir" do menu. `show()` sozinho nao
 // desminimiza -- se a janela ficou minimizada (nao apenas escondida), show() e um no-op
@@ -54,6 +54,14 @@ pub fn run() {
                     }
                 })
                 .build(app)?;
+
+            // Liga o autostart na primeira execucao -- sem isso o plugin fica so
+            // registrado/permitido mas nunca ativado de fato, e o app nao sobe
+            // sozinho quando o Windows reinicia.
+            let autolaunch = app.autolaunch();
+            if !autolaunch.is_enabled().unwrap_or(false) {
+                let _ = autolaunch.enable();
+            }
 
             // Se o app foi iniciado com --minimized (autostart do Windows), a janela
             // principal ja nasce oculta (ver tauri.conf.json) -- so o tray aparece.
