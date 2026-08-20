@@ -71,7 +71,17 @@ export default function App() {
       .eq('auth_id', user.id)
       .single();
 
-    if (error || !profile || profile.role !== 'gerente' || !profile.id_empresa) {
+    // Erro de rede/consulta (ex.: fetch que trava no WebView2) é diferente de conta sem
+    // permissão -- nao desloga aqui pra nao forcar login de novo numa sessao que era valida,
+    // e mostra o motivo real em vez de mentir "conta nao e de gerente".
+    if (error) {
+      console.error('[cheguei-alerta] falha ao consultar perfil do usuario:', error);
+      setErroLogin(`Erro ao carregar perfil: ${error.message || 'falha de conexão'}. Tente novamente.`);
+      setFase('login');
+      return;
+    }
+
+    if (!profile || profile.role !== 'gerente' || !profile.id_empresa) {
       await supabase.auth.signOut();
       setErroLogin('Essa conta não é de um parceiro gerente. Confira o login.');
       setFase('login');
